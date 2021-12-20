@@ -12,6 +12,7 @@ const app = express();
 
 dotenv.config();
 
+app.use(helmet());
 app.use(express.json());
 app.use(
   queryParser({
@@ -24,11 +25,10 @@ app.use(
 
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
-  app.use(helmet());
 }
 
 // * routes
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   resJson(res, 200, "Welcome to Ma-Books");
 });
 app.use("/api/books", booksRoute);
@@ -39,7 +39,5 @@ app.use("*", (req, res) => {
   res.status(404).send("Resource not found");
 });
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = 5000;
-  app.listen(PORT, () => `Running on http://localhost:${PORT}`);
-}
+var PORT = process.env.PORT || 5000;
+app.listen(PORT, () => `Running on the port:${PORT}`);
